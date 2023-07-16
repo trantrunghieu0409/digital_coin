@@ -1,6 +1,6 @@
 import { Transaction } from "./transaction";
 
-class Block {
+export class Block {
 
     public index: number;
     public hash: string;
@@ -21,5 +21,3 @@ class Block {
         this.nonce = nonce;
     }
 }
-
-export {Block};

@@ -20,6 +20,10 @@ const getTransactionId = (transaction: Transaction): string => {
 
 const validateTransaction = (transaction: Transaction, aUnspentTxOuts: UnspentTxOut[]): boolean => {
 
+    if (!isValidTransactionStructure(transaction)) {
+        return false;
+    }
+
     if (getTransactionId(transaction) !== transaction.id) {
         console.log('invalid tx id: ' + transaction.id);
         return false;
@@ -198,10 +202,6 @@ const updateUnspentTxOuts = (aTransactions: Transaction[], aUnspentTxOuts: Unspe
 
 const processTransactions = (aTransactions: Transaction[], aUnspentTxOuts: UnspentTxOut[], blockIndex: number) => {
 
-    if (!isValidTransactionsStructure(aTransactions)) {
-        return null;
-    }
-
     if (!validateBlockTransactions(aTransactions, aUnspentTxOuts, blockIndex)) {
         console.log('invalid block transactions');
         return null;
@@ -255,12 +255,6 @@ const isValidTxOutStructure = (txOut: TxOut): boolean => {
     }
 };
 
-const isValidTransactionsStructure = (transactions: Transaction[]): boolean => {
-    return transactions
-        .map(isValidTransactionStructure)
-        .reduce((a, b) => (a && b), true);
-};
-
 const isValidTransactionStructure = (transaction: Transaction) => {
     if (typeof transaction.id !== 'string') {
         console.log('transactionId missing');
@@ -292,6 +286,7 @@ const isValidTransactionStructure = (transaction: Transaction) => {
 // valid address is a valid ecdsa public key in the 04 + X-coordinate + Y-coordinate format
 const isValidAddress = (address: string): boolean => {
     if (address.length !== 130) {
+        console.log(address);
         console.log('invalid public key length');
         return false;
     } else if (address.match('^[a-fA-F0-9]+$') === null) {
@@ -305,6 +300,5 @@ const isValidAddress = (address: string): boolean => {
 };
 
 export {
-    processTransactions, signTxIn, getTransactionId, isValidAddress,
-    getCoinbaseTransaction, getPublicKey, Transaction, UnspentTxOut
+    processTransactions, signTxIn, getTransactionId, isValidAddress, validateTransaction, getCoinbaseTransaction, getPublicKey, hasDuplicates,
 };
