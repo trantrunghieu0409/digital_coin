@@ -1,0 +1,19 @@
+{
+  "name": "digital_coin",
+  "version": "1.0.0",
+  "description": "First version",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trantrunghieu0409/digital_coin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trantrunghieu0409/digital_coin/issues"
+  },
+  "homepage": "https://github.com/trantrunghieu0409/digital_coin#readme"
+}
