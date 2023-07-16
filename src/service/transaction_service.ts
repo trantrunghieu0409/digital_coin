@@ -61,7 +61,7 @@ const validateBlockTransactions = (aTransactions: Transaction[], aUnspentTxOuts:
     }
 
     // check for duplicate txIns. Each txIn can be included only once
-    const txIns: TxIn[] = _(aTransactions)
+    const txIns: TxIn[] = _._(aTransactions)
         .map((tx) => tx.txIns)
         .flatten()
         .value();
@@ -79,7 +79,7 @@ const validateBlockTransactions = (aTransactions: Transaction[], aUnspentTxOuts:
 
 const hasDuplicates = (txIns: TxIn[]): boolean => {
     const groups = _.countBy(txIns, (txIn: TxIn) => txIn.txOutId + txIn.txOutIndex);
-    return _(groups)
+    return _._(groups)
         .map((value, key) => {
             if (value > 1) {
                 console.log('duplicate txIn: ' + key);

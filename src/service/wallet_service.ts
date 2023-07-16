@@ -42,7 +42,7 @@ const deleteWallet = () => {
 };
 
 const getBalance = (address: string, unspentTxOuts: UnspentTxOut[]): number => {
-    return _(findUnspentTxOuts(address, unspentTxOuts))
+    return _._(findUnspentTxOuts(address, unspentTxOuts))
         .map((uTxO: UnspentTxOut) => uTxO.amount)
         .sum();
 };
@@ -79,7 +79,7 @@ const createTxOuts = (receiverAddress: string, myAddress: string, amount, leftOv
 };
 
 const filterTxPoolTxs = (unspentTxOuts: UnspentTxOut[], transactionPool: Transaction[]): UnspentTxOut[] => {
-    const txIns: TxIn[] = _(transactionPool)
+    const txIns: TxIn[] = _._(transactionPool)
         .map((tx: Transaction) => tx.txIns)
         .flatten()
         .value();
