@@ -1,38 +1,15 @@
 {
   "name": "digital_coin",
   "version": "1.0.0",
-  "description": "First version",
-  "main": "main.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/main.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/main.js\"",
-    "clean": "rmdir /s dist"
+    "start_be": "node server/dist/main.js",
+    "start_fe": "node server/dist/main.js",
+    "start": "npm run start_be & npm run start_fe",
+    "install": "cd server & npm install & cd ../client & npm install"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/trantrunghieu0409/digital_coin.git"
-  },
+  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/trantrunghieu0409/digital_coin/issues"
-  },
-  "homepage": "https://github.com/trantrunghieu0409/digital_coin#readme",
-  "dependencies": {
-    "crypto-js": "^4.1.1",
-    "dotenv": "^16.3.1",
-    "elliptic": "^6.5.4",
-    "express": "^4.18.2",
-    "lodash": "^4.17.21",
-    "ws": "^8.13.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.17",
-    "@types/node": "^20.4.2",
-    "@types/ws": "^8.5.5",
-    "concurrently": "^8.2.0",
-    "nodemon": "^3.0.1",
-    "typescript": "^5.1.6"
-  }
+  "license": "ISC"
 }
