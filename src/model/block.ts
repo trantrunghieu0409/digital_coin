@@ -14,3 +14,5 @@ class Block {
         this.hash = hash;
     }
 }
+
+export {Block};
