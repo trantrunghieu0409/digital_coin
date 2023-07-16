@@ -1,7 +1,7 @@
 import * as  bodyParser from 'body-parser';
 import express from 'express';
 import { generateNextBlock, getBlockchain } from './service/block_service';
-import { getSockets, connectToPeers, initP2PServer } from './controller/p2p';
+import { getSockets, connectToPeers, initP2PServer } from './websocket/p2p';
 import { Block } from './model/block';
 
 
