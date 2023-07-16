@@ -3,3 +3,5 @@ export const BLOCK_GENERATION_INTERVAL: number = 10;
 
 // in blocks
 export const DIFFICULTY_ADJUSTMENT_INTERVAL: number = 10;
+
+export const COINBASE_AMOUNT: number = 50;
