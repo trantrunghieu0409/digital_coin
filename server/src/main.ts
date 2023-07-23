@@ -49,12 +49,30 @@ const initHttpServer = (myHttpPort: number) => {
         }
     });
 
-    app.get('/balance', (req, res) => {
-        const balance: number = getAccountBalance();
+    app.get('/balance/:address', (req, res) => {
+        const address = req.params.address;
+        const balance: number = getAccountBalance(address);
         res.send({'balance': balance});
     });
 
     app.get('/address', (req, res) => {
+        const address: string = getPublicFromWallet();
+        res.send({'address': address});
+    });
+
+    app.get('/wallets', (req, res) => {
+        const wallets: any = [
+            {
+              'address': getPublicFromWallet()
+            },
+            {
+              'address': '12345678'
+            },
+          ];
+        res.send(wallets);
+    });
+
+    app.post('/wallet', (req, res) => {
         const address: string = getPublicFromWallet();
         res.send({'address': address});
     });

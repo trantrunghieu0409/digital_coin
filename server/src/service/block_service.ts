@@ -113,8 +113,8 @@ const findBlock = (index: number, previousHash: string, timestamp: number, data:
     }
 };
 
-const getAccountBalance = (): number => {
-    return getBalance(getPublicFromWallet(), getUnspentTxOuts());
+const getAccountBalance = (address: string): number => {
+    return getBalance(address, getUnspentTxOuts());
 };
 
 const sendTransaction = (address: string, amount: number): Transaction => {

@@ -67,14 +67,11 @@ export default {
       this.getAddress();
       this.getBalance();
     },
-    getAddress: async function () {
-      http.get('/address')
-        .then(resp => {
-          this.address = resp.data.address;
-        })
+    getAddress: function () {
+      this.address = sessionStorage.getItem('address')
     },
-    getBalance: async function () {
-      http.get('/balance')
+    getBalance: function () {
+      http.get(`/balance/${this.address}`)
         .then(resp => {
           this.balance = resp.data.balance;
         })
