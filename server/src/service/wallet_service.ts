@@ -25,10 +25,10 @@ const generatePrivateKey = (): string => {
 };
 
 const initWallet = () => {
-    // let's not override existing private keys
-    if (existsSync(privateKeyLocation)) {
-        return;
-    }
+    // // let's not override existing private keys
+    // if (existsSync(privateKeyLocation)) {
+    //     return;
+    // }
     const newPrivateKey = generatePrivateKey();
 
     writeFileSync(privateKeyLocation, newPrivateKey);

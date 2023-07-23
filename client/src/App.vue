@@ -1,6 +1,6 @@
 <!--
 =========================================================
-* Vue Argon Dashboard 2 - v3.0.0
+* Vue MyCoin Dashboard 2 - v3.0.0
 =========================================================
 
 * Product Page: https://creative-tim.com/product/vue-argon-dashboard
@@ -21,7 +21,7 @@ Coded by www.creative-tim.com
     :custom_class="this.$store.state.mcolor"
     :class="[
       this.$store.state.isTransparent,
-      this.$store.state.isRTL ? 'fixed-end' : 'fixed-start'
+      'fixed-start'
     ]"
     v-if="this.$store.state.showSidenav"
   />
