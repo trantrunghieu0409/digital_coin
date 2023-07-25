@@ -27,7 +27,7 @@
                     <i class="ni ni-single-copy-04 me-2"></i>
                   </div>
                   <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm">{{ maskValue(item.txnHash) }}</h6>
+                    <h6 class="mb-0 text-sm">{{ maskValue(item.transactionId) }}</h6>
                   </div>
                 </div>
               </td>
@@ -41,13 +41,13 @@
                 <span class="text-secondary text-xs font-weight-bold">{{ item.age }}</span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.from) }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.receiverAddress) }}</span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.to) }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.sentAddress) }}</span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ item.value }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{ item.amount }}</span>
               </td>
             </tr>
           </tbody>
@@ -58,47 +58,38 @@
 </template>
 
 <script>
+import { http } from '../../plugins/axios.js'
+
 export default {
   name: "transaction-table",
   data() {
     return {
-      transactions: [
-        {
-          "txnHash": "0x12345632132132134567890-=-0987654567890-",
-          "block": "0x1234567895345345345345345345345",
-          "age": "20 seconds",
-          'from': '0x123456789914134235245345345345',
-          'to': '0x134611335423545245345345345',
-          'value': '500'
-        },
-        {
-          "txnHash": "0x12345632132132134567890-=-0987654567890-",
-          "block": "0x1234567895345345345345345345345",
-          "age": "20 seconds",
-          'from': '0x123456789914134235245345345345',
-          'to': '0x134611335423545245345345345',
-          'value': '500'
-        },
-        {
-          "txnHash": "0x12345632132132134567890-=-0987654567890-",
-          "block": "0x1234567895345345345345345345345",
-          "age": "20 seconds",
-          'from': '0x123456789914134235245345345345',
-          'to': '0x134611335423545245345345345',
-          'value': '500'
-        },
-        {
-          "txnHash": "0x12345632132132134567890-=-0987654567890-",
-          "block": "0x1234567895345345345345345345345",
-          "age": "20 seconds",
-          'from': '0x123456789914134235245345345345',
-          'to': '0x134611335423545245345345345',
-          'value': '500'
-        },
-      ]
+      transactions: []
     }
   },
+  created() {
+    this.init();
+  },
   methods: {
+    init: function () {
+      this.getAddress();
+      this.getTransactionHistory();
+    },
+    getAddress: function () {
+      this.address = sessionStorage.getItem('address')
+    },
+    getTransactionHistory: function () {
+      http.get(`/transactionHistory/${this.address}`)
+        .then(resp => {
+          this.transactions = resp.data;
+          this.transactions.forEach((t) => {
+            if (t.receiverAddress == this.address)
+              t.receiverAddress = 'My Wallet'
+            else 
+              t.sentAddress = 'My Wallet' 
+          })
+        })
+    },
     maskValue: function (value) {
       if (String(value).length > 12)
         return String(value).substring(0, 12) + "..."

@@ -4,14 +4,24 @@
       :style="{ backgroundImage: 'url(' + require('../../assets/img/card-bitcoin.jpg') + ')' }">
       <span class="mask bg-gradient-dark"></span>
       <div class="card-body position-relative z-index-1 p-3">
-        <p class="text-white text-sm opacity-8 mb-0">{{ balanceText }}</p>
-        <h2 class="text-white mb-5 pb-2">${{ balance * 1.5 }}</h2>
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="text-white text-sm opacity-8 mb-0">{{ balanceText }}</p>
+            <h2 class="text-white mb-5 pb-2">${{ balance * 1.5 }}</h2>
+          </div>
+          <div>
+            <argon-button color="white" variant="outline" @click="mineBlock()">
+              <i class="fa fa-plus text-warning me-2"></i> Mine Block
+            </argon-button>
+          </div>
+        </div>
         <div class="d-flex">
           <div class="d-flex">
             <div :class="'me-4'">
               <p class="text-white text-sm opacity-8 mb-0">{{ publicAddressText }}</p>
               <h6 class="text-white mb-0">0x{{ String(address).substring(0, 16) }}...
-                <i style="cursor: pointer;" class="ni ni-ungroup text-sm opacity-8 mb-0" @click="copyURL(address)"> Copy</i>
+                <i style="cursor: pointer;" class="ni ni-ungroup text-sm opacity-8 mb-0" @click="copyURL(address)">
+                  Copy</i>
               </h6>
             </div>
             <div :class="'me-4'">
@@ -33,12 +43,14 @@
 import ArgonAvatar from "@/components/ArgonAvatar.vue";
 import img from "../../assets/img/card-visa.jpg";
 import img1 from "../../assets/img/logos/mastercard.png";
+import ArgonButton from "@/components/ArgonButton.vue";
 import { http } from '../../plugins/axios.js'
 
 export default {
   name: "master-card",
   components: {
     ArgonAvatar,
+    ArgonButton
   },
   props: {
     balanceText: {
@@ -77,6 +89,19 @@ export default {
       http.get(`/balance/${this.address}`)
         .then(resp => {
           this.balance = resp.data.balance;
+        })
+    },
+    mineBlock: function () {
+      http.post(`/mineBlock/${this.address}`)
+        .then(resp => {
+          this.getBalance()
+        })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
         })
     },
     async copyURL(mytext) {

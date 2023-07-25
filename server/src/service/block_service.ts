@@ -7,6 +7,7 @@ import { processTransactions, getCoinbaseTransaction, isValidAddress } from "./t
 import { getPublicFromWallet, createTransaction, getPrivateFromWallet, getBalance, findUnspentTxOuts } from "./wallet_service";
 import { getTransactionPool, addToTransactionPool, updateTransactionPool } from "./transaction_pool_service";
 import { UnspentTxOut, Transaction } from "../model/transaction";
+import { TransactionHistory } from "../model/history";
 var CryptoJS = require('crypto-js');
 
 const genesisTransaction = {
@@ -264,9 +265,36 @@ const handleReceivedTransaction = (transaction: Transaction) => {
     addToTransactionPool(transaction, getUnspentTxOuts());
 };
 
+const getTransactionHistory = (ownerAddress: string) => {
+    let histories = []
+    let blockchain = getBlockchain()
+    for (let block of blockchain) {
+        block.data.forEach(function (t) {
+            if (t.txOuts.length != 2) return;
+
+            let receivedAddress = t.txOuts[0].address;
+            let sentAddress = t.txOuts[1].address;
+            let amount = t.txOuts[0].amount
+            let id = t.id
+            
+            if (receivedAddress != ownerAddress && sentAddress != ownerAddress) return;
+            
+            histories.push(new TransactionHistory(
+                receivedAddress,
+                sentAddress,
+                amount,
+                id,
+                block.hash
+            ))
+        })
+    }
+
+    return histories;
+}
+
 export {
     getBlockchain, getUnspentTxOuts, getLatestBlock, sendTransaction,
     generateRawNextBlock, generateNextBlock, generatenextBlockWithTransaction,
     handleReceivedTransaction, getMyUnspentTransactionOutputs,
-    getAccountBalance, isValidBlockStructure, replaceChain, addBlockToChain
+    getAccountBalance, isValidBlockStructure, replaceChain, addBlockToChain, getTransactionHistory
 };

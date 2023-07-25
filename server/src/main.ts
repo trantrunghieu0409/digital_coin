@@ -1,11 +1,12 @@
 import * as  bodyParser from 'body-parser';
 import express from 'express';
 import * as _ from 'lodash';
-import { generateNextBlock, generateRawNextBlock, generatenextBlockWithTransaction, getAccountBalance, getBlockchain, getUnspentTxOuts, sendTransaction } from './service/block_service';
+import { generateNextBlock, generateRawNextBlock, generatenextBlockWithTransaction, getAccountBalance, getBlockchain, getTransactionHistory, getUnspentTxOuts, sendTransaction } from './service/block_service';
 import { getSockets, connectToPeers, initP2PServer } from './websocket/p2p';
 import { Block } from './model/block';
 import { initWallet, getAllWallets, deleteWallet } from './service/wallet_service';
 import { UnspentTxOut } from './model/transaction';
+import { getTransactionPool } from './service/transaction_pool_service';
 
 const httpPort: number = parseInt(process.env.HTTP_PORT) || 3001;
 const p2pPort: number = parseInt(process.env.P2P_PORT) || 6001;
@@ -113,6 +114,24 @@ const initHttpServer = (myHttpPort: number) => {
             .flatten()
             .find({'id': req.params.id});
         res.send(tx);
+    });
+    
+    app.get('/transactionPool', (req, res) => {
+        res.send(getTransactionPool());
+    });
+
+    app.get('/transactionHistory/:address', (req, res) => {
+        try{
+            const address = req.params.address;
+
+            if (address === undefined) {
+                throw Error('invalid address or amount');
+            }
+            res.send(getTransactionHistory(req.params.address));
+        } catch (e) {
+            console.log(e.message);
+            res.status(400).send(e.message);
+        }
     });
 
     app.get('/address/:address', (req, res) => {
