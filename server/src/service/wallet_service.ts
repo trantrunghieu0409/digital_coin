@@ -1,19 +1,21 @@
 import {ec} from 'elliptic';
-import {existsSync, readFileSync, unlinkSync, writeFileSync} from 'fs';
+import {appendFile, appendFileSync, existsSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync} from 'fs';
 import * as _ from 'lodash';
 import { getPublicKey, getTransactionId, signTxIn } from './transaction_service';
 import { UnspentTxOut, TxOut, Transaction, TxIn } from '../model/transaction';
+import { dir } from 'console';
 
 const EC = new ec('secp256k1');
-const privateKeyLocation = process.env.PRIVATE_KEY || 'node/wallet/private_key';
+const privateKeyLocation = process.env.PRIVATE_KEY || 'node/wallet/';
+let wallets = [];
 
-const getPrivateFromWallet = (): string => {
-    const buffer = readFileSync(privateKeyLocation, 'utf8');
+const getPrivateFromWallet = (publicAddress): string => {
+    const buffer = readFileSync(privateKeyLocation + publicAddress, 'utf8');
     return buffer.toString();
 };
 
-const getPublicFromWallet = (): string => {
-    const privateKey = getPrivateFromWallet();
+const getPublicFromWallet = (privateAddress): string => {
+    const privateKey = privateAddress;
     const key = EC.keyFromPrivate(privateKey, 'hex');
     return key.getPublic().encode('hex');
 };
@@ -24,21 +26,25 @@ const generatePrivateKey = (): string => {
     return privateKey.toString(16);
 };
 
-const initWallet = () => {
-    // // let's not override existing private keys
-    // if (existsSync(privateKeyLocation)) {
-    //     return;
-    // }
-    const newPrivateKey = generatePrivateKey();
+const getAllWallets = () => { return wallets; };
 
-    writeFileSync(privateKeyLocation, newPrivateKey);
+const initWallet = () => {
+    // let's not override existing private keys
+    const newPrivateKey = generatePrivateKey();
+    const newPublicKey = getPublicFromWallet(newPrivateKey);
+    let privateKeyPath = privateKeyLocation + newPublicKey;
+
+    writeFileSync(privateKeyPath, newPrivateKey);
     console.log('new wallet with private key created to : %s', privateKeyLocation);
+    wallets.push({address: newPublicKey})
 };
 
 const deleteWallet = () => {
-    if (existsSync(privateKeyLocation)) {
-        unlinkSync(privateKeyLocation);
-    }
+    readdirSync(privateKeyLocation).forEach(f => rmSync(`${privateKeyLocation}/${f}`));
+
+    // if (existsSync(privateKeyLocation)) {
+    //     unlinkSync(privateKeyLocation);
+    // }
 };
 
 const getBalance = (address: string, unspentTxOuts: UnspentTxOut[]): number => {
@@ -133,5 +139,5 @@ const createTransaction = (receiverAddress: string, amount: number, privateKey: 
     return tx;
 };
 
-export {createTransaction, getPublicFromWallet,
+export {createTransaction, getPublicFromWallet, getAllWallets,
     getPrivateFromWallet, getBalance, generatePrivateKey, initWallet, deleteWallet, findUnspentTxOuts};

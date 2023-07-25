@@ -10,17 +10,20 @@
           <div class="d-flex">
             <div :class="'me-4'">
               <p class="text-white text-sm opacity-8 mb-0">{{ publicAddressText }}</p>
-              <h6 class="text-white mb-0">0x{{ String(address).substring(0,16) }}...</h6>
+              <h6 class="text-white mb-0">0x{{ String(address).substring(0, 16) }}...
+                <i style="cursor: pointer;" class="ni ni-ungroup text-sm opacity-8 mb-0" @click="copyURL(address)"> Copy</i>
+              </h6>
             </div>
             <div :class="'me-4'">
               <p class="text-white text-sm opacity-8 mb-0">{{ coinText }}</p>
               <h6 class="text-white mb-0">{{ balance }}</h6>
             </div>
+
           </div>
           <div class="w-20 d-flex align-items-end justify-content-end" :class="'ms-auto'">
           </div>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -30,7 +33,7 @@
 import ArgonAvatar from "@/components/ArgonAvatar.vue";
 import img from "../../assets/img/card-visa.jpg";
 import img1 from "../../assets/img/logos/mastercard.png";
-import {http} from '../../plugins/axios.js'
+import { http } from '../../plugins/axios.js'
 
 export default {
   name: "master-card",
@@ -76,6 +79,13 @@ export default {
           this.balance = resp.data.balance;
         })
     },
+    async copyURL(mytext) {
+      try {
+        await navigator.clipboard.writeText(mytext);
+        alert("Copied")
+      } catch ($e) {
+      }
+    }
   }
 };
 </script>

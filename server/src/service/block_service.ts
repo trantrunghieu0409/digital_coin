@@ -79,25 +79,25 @@ const generateRawNextBlock = (blockData: Transaction[]) => {
 };
 
 // gets the unspent transaction outputs owned by the wallet
-const getMyUnspentTransactionOutputs = () => {
-    return findUnspentTxOuts(getPublicFromWallet(), getUnspentTxOuts());
+const getMyUnspentTransactionOutputs = (ownerPublicAddress) => {
+    return findUnspentTxOuts(ownerPublicAddress, getUnspentTxOuts());
 };
 
-const generateNextBlock = () => {
-    const coinbaseTx: Transaction = getCoinbaseTransaction(getPublicFromWallet(), getLatestBlock().index + 1);
+const generateNextBlock = (ownerPublicAddress) => {
+    const coinbaseTx: Transaction = getCoinbaseTransaction(ownerPublicAddress, getLatestBlock().index + 1);
     const blockData: Transaction[] = [coinbaseTx].concat(getTransactionPool());
     return generateRawNextBlock(blockData);
 };
 
-const generatenextBlockWithTransaction = (receiverAddress: string, amount: number) => {
+const generatenextBlockWithTransaction = (receiverAddress: string, amount: number, ownerPublicAddress: string) => {
     if (!isValidAddress(receiverAddress)) {
         throw Error('invalid address');
     }
     if (typeof amount !== 'number') {
         throw Error('invalid amount');
     }
-    const coinbaseTx: Transaction = getCoinbaseTransaction(getPublicFromWallet(), getLatestBlock().index + 1);
-    const tx: Transaction = createTransaction(receiverAddress, amount, getPrivateFromWallet(), getUnspentTxOuts(), getTransactionPool());
+    const coinbaseTx: Transaction = getCoinbaseTransaction(ownerPublicAddress, getLatestBlock().index + 1);
+    const tx: Transaction = createTransaction(receiverAddress, amount, getPrivateFromWallet(ownerPublicAddress), getUnspentTxOuts(), getTransactionPool());
     const blockData: Transaction[] = [coinbaseTx, tx];
     return generateRawNextBlock(blockData);
 };
@@ -117,8 +117,8 @@ const getAccountBalance = (address: string): number => {
     return getBalance(address, getUnspentTxOuts());
 };
 
-const sendTransaction = (address: string, amount: number): Transaction => {
-    const tx: Transaction = createTransaction(address, amount, getPrivateFromWallet(), getUnspentTxOuts(), getTransactionPool());
+const sendTransaction = (address: string, amount: number, ownerPublicAddress: string): Transaction => {
+    const tx: Transaction = createTransaction(address, amount, getPrivateFromWallet(ownerPublicAddress), getUnspentTxOuts(), getTransactionPool());
     addToTransactionPool(tx, getUnspentTxOuts());
     broadCastTransactionPool();
     return tx;
