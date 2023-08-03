@@ -6,7 +6,7 @@ const routes = [
   {
     path: "/",
     name: "/",
-    redirect: "/portfolio",
+    redirect: "/create-wallet",
   },
   {
     path: "/portfolio",

@@ -41,10 +41,10 @@
                 <span class="text-secondary text-xs font-weight-bold">{{ item.age }}</span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.receiverAddress) }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.sentAddress) }}</span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.sentAddress) }}</span>
+                <span class="text-secondary text-xs font-weight-bold">{{ maskValue(item.receiverAddress) }}</span>
               </td>
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs font-weight-bold">{{ item.amount }}</span>
