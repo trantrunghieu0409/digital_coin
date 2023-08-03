@@ -6,10 +6,10 @@
   "scripts": {
     "start_be": "node server/dist/main.js",
     "start_fe": "node server/dist/main.js",
-    "dev_be": "cd server & npm run dev",
-    "dev_fe": "cd client & npm run dev",
+    "dev_be": "cd server & yarn dev",
+    "dev_fe": "cd client & yarn serve",
     "start": "npm run start_be & npm run start_fe",
-    "install": "cd server & npm install & cd ../client & npm install"
+    "install": "cd server & yarn install & cd ../client & yarn install"
   },
   "keywords": [],
   "author": "",
