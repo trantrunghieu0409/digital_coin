@@ -1,0 +1,17 @@
+{
+  "name": "digital_coin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start_be": "node server/dist/main.js",
+    "start_fe": "node server/dist/main.js",
+    "dev_be": "cd server & npm run dev",
+    "dev_fe": "cd client & npm run dev",
+    "start": "npm run start_be & npm run start_fe",
+    "install": "cd server & npm install & cd ../client & npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
